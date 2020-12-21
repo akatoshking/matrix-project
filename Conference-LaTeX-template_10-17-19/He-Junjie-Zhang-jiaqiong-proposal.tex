@@ -1,0 +1,374 @@
+\documentclass[onecolumn, conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\begin{document}
+
+\title{Tensor network and neural networks
+
+}
+
+\author{
+    \IEEEauthorblockN{Junjie He}
+\IEEEauthorblockA{\textit{School of Information Science and Technology} \\
+\textit{ShanghaiTech University}\\
+Shanghai, China \\
+hejj1@shanghaitech.edu.cn}
+\and
+\IEEEauthorblockN{Jiaqiong Zhang}
+\IEEEauthorblockA{\textit{School of Information Science and Technology} \\
+\textit{ShanghaiTech University}\\
+Shanghai, China \\
+zhangjq@shanghaitech.edu.cn}
+% \and
+% \IEEEauthorblockN{3\textsuperscript{rd} Given Name Surname}
+% \IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
+% \textit{name of organization (of Aff.)}\\
+% City, Country \\
+% email address or ORCID}
+% \and
+% \IEEEauthorblockN{4\textsuperscript{th} Given Name Surname}
+% \IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
+% \textit{name of organization (of Aff.)}\\
+% City, Country \\
+% email address or ORCID}
+% \and
+% \IEEEauthorblockN{5\textsuperscript{th} Given Name Surname}
+% \IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
+% \textit{name of organization (of Aff.)}\\
+% City, Country \\
+% email address or ORCID}
+% \and
+% \IEEEauthorblockN{6\textsuperscript{th} Given Name Surname}
+% \IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
+% \textit{name of organization (of Aff.)}\\
+% City, Country \\
+% email address or ORCID}
+}
+
+\maketitle
+
+% \begin{abstract}
+% This document is a model and instructions for \LaTeX.
+% This and the IEEEtran.cls file define the components of your paper [title, text, heads, etc.]. *CRITICAL: Do Not Use Symbols, Special Characters, Footnotes, 
+% or Math in Paper Title or Abstract.
+% \end{abstract}
+
+% \begin{IEEEkeywords}
+% component, formatting, style, styling, insert
+% \end{IEEEkeywords}
+
+\section{Introduction}
+Main topic for our project are tensor methods and neural network.Deep neural networks currently demonstrate state-of-the-art performance in several domains.such as computer vision, speech recognition, text processing, etc.These advances have become possible because of algorithmic advances, large amounts of available data,and modern hardware. For example, convolutional neural networks (CNNs) \cite{b1}\cite{b2}show by a large margin superior performance on the task of image classification.These models have thousands of nodes and millions of learnable parameters and are trained using millions of images\cite{b3} on powerful Graphics Processing Units (GPUs).The necessity of expensive hardware and long processing time are the factors that complicate the application of such models on conventional desktops and portable devices.
+In tradition neural network,this layer has a linear transformation of a high dimension input signal to a high dimension output signal.For example,the data set CIFAR10 widely used in deep learning course is a collection of pictures.When it used as input signal into neural network,the pictures in it will be divided 32*32*3 pixels.particularly, 32*32 means a picture divided into 32*32 pixel blocks,and 3 means three channels(RGB).Then,the input signal will be reshaped a 32*32*3 dimensional vector .Obviously,such an operation will largely increase the dimension of input signal,and leads to  further complexity of the calculations.The data set CIFAR10\cite{b5} is already a very simple data set in the field of deep learning.However,in the convolutional neural network model used in practical application the dimensions of the input and output signals of the fully-connected layers are of the order of thousands, bringing the number of parameters of the fully-connected layers up to millions.This is undoubtedly a very demanding requirement for hardware facilities.
+Consequently, a large number of works tried to reduce both hardware requirements (e. g. memory demands) and running times.To solve this problem,We consider the most frequently used layer of neural network:fully-connected layer.We use a compact tensor train data set to represent the matrix of the fully-connected layers using few parameters while keeping enough flexibility to perform signal transformations\cite{b6}.And,the layer transformed should be compatible with the existing training algorithms for neural network,because all the derivatives required by the back propagation algorithm\cite{b4} can be computed using the properties of Tensor train set.
+Tensors are natural multidimensional generalizations of matrices and have attracted tremendous interest in recent years.Multilinear algebra,tensor analysis, and the theory of tensor approximations play increasingly important roles in computational mathematics and numerical analysis\cite{b7}\cite{b8}\cite{b9}\cite{b10}. An efficient representation of a tensor (by tensor we mean only an array with d indices) by a small number of parameters may give us an opportunity and ability to work with d-dimensional problems, with d being as high as 10, 100, 1000 or even one million.Problems of such sizes cannot be handled by standard numerical methods due to the curse of dimensionality, since everything (memory, amount of operations) grows exponentially in d.So,Tensor train decomposition will a effective way to solve this problem.
+We will apply our method to popular network architectures proposed for data set CIFAR10.We will experimentally use the networks with tradition fully-connected layer and the tensor fully-connected layer to train a neural network model.Then,we will compare the performance of two models.
+
+\section{Preliminary ideas}
+In various fields, low-rank approximation was applied to reduce the computation cost and memory usage. In \cite{b11}, they generalize the idea of low-rank. The authors do not find low-rank approximation of weight matrix in fully-connected layers, they treat the matrix as multidimensional tensor and employ Tensor Train decomposition \cite{b6} to accelerate the computation.
+Usally, wider neural network can achieve better performance than narrow neural network. But wide neural networks imply large dense matrix, amount of computation resources are used in per step when training neural networks. By using Tensor Train decomposition for weight matrix, wide neural network can be developed for applications with moderate computation cost and memory usage. 
+\cite{b11} shows that wide and shallow neural networks has competitive performance with the state-of-art deep neural networks by traing a shallow network oin the outputs of a trained deep neural network.
+They report the improvement of performance with the increase of the layer size and used up to 30 000 hidden units while restricting the matrix rank of the weight matrix in order to be able to keep and to update it during the training. Restricting the TT-ranks of the weight matrix (in contrast to the matrix rank) allows to use much wider layers potentially leading to the greater expressive power of the model.
+
+\par CP-decomposition algorithm was applied to compress convolution kernel in CNNs. And they also using properties of CP-decomposition to speed up the inference time.
+tp speed up computation of matrix-by-vector, properties of the Kronecker product of matrices was exploited. These matrices have the same structure as TT-matrices with unit TT-ranks. We can generalize this idea to formulate the weight matrix with TT-matrices with unit TT-ranks. 
+The Tucker format and the canonical format will meet the curse of dimensionality, TT-format is immune to the cues of dimensionality and its algorithm are robust. 
+\par A $d$-dimensional array (tensor) $ \mathcal{A}$ is said to be TT-format if for each dimension $k=1,...,d$ and for each possible value of the $k$-th  dimension index $j_k=1,...,n_k$ there exists a matrix $\mathbf{G}_k[j_k]$ such that all elements of $\mathcal{A}$ can be computed as the following matrix product:
+\begin{equation}
+    \label{eq1}
+    \mathcal{A}(j_1,...,j_d)=\mathbf{G}_1[j_1]\mathbf{G}_2[j_2]\cdots\mathbf{G}_d[j_d]
+\end{equation}
+All the matrices $\mathbf{G}_k[j_k]$ related to the same dimension $k$ are restricted to be of the same size $r_{k-1}\times r_k$. 
+The values $r_0$ and $r_d$ equal to 1 in order to keep the matrix product (\ref{eq1}) of size $1\times 1$. 
+In what follows we refer to the representation of a tensor in the TT-format as the TT-representation or d the TT-decomposition. 
+The sequence $\{r_k \}^d_{k=0}$ is referred to as the TT-ranks of the TT-representation of $\mathbf{A}$ 
+(or the ranks for short), its maximum – as the maximal TT-rank of the TT-representation $n$ of $\mathcal{A}: r = \max_{k=0,...,d} r_k$ . 
+The collections of the matrices $(\mathbf{G}_k [j_k ])_{j_k}^{n_k} =1$ corresponding to the same dimension (technically, 3-dimensional arrays $\mathcal{G}_k$ ) are called the cores.
+
+We use the symbols $\mathbf{G}_k[j_k](\alpha_{k-1},\alpha_k)$ to denote the element of the matrix $\mathbf{G}_k[j_k]$ in the position $(\alpha_{k-1},\alpha_k)$, 
+
+where $\alpha_{k-1}=1,...,r_{k-1},\alpha_k=1,...,r_k$. Equation (\ref{eq1}) can be equivalently rewritten as the sum of the products of the elements of the cores:
+\begin{equation}
+    \label{eq2}
+    \mathcal{A}(j_1,...,j_d)=\sum_{\alpha_0,...,\alpha_d} \mathbf{G}_1[j_1](\alpha_{0},\alpha_1)\cdots \mathbf{G}_d[j_d](\alpha_{d-1},\alpha_d)
+\end{equation}
+The representation of a tensor $\mathcal{A}$ via the explicit enumeration of all its elements requires to store 
+$\prod_{k=1}^d n_k $ numbers compared with $\sum_{k=1}^d n_kr_{k-1}r_k$ numbers if the tensor is stored in the TT-format. 
+Thus, the TT-format is very efﬁcient in terms of memory if the ranks are small.
+
+An attractive property of the TT-decomposition is the ability to efﬁciently perform several types of operations on tensors if they are in the TT-format: basic linear algebra operations, such as the addition of a constant and the multiplication by a constant, the summation and the entrywise product of tensors (the results of these operations are tensors in the TT-format generally with the increased ranks); computation of global characteristics of a tensor, such as the sum of all elements and the Frobenius norm. 
+See [17] for a detailed description of all the supported operations.
+\par 
+Neural networks are usually trained with the stochastic gradient descent algorithm where the gradient is computed using the back-propagation procedure. 
+Back-propagation allows to compute the gradient of a loss-function $L$ with respect to all the parameters of the network. 
+The method starts with the computation of the gradient of $L$ w.r.t. the output of the last layer and proceeds sequentially through the layers in the reversed order while computing the gradient w.r.t. the parameters and the input of the layer making use of the gradients computed earlier. 
+Applied to tensorizing fully-connected layers  the back-propagation method computes the gradients w.r.t. the input $\bf{x}$ and the parameters $\bf{W}$ and $\bf{b}$ given the gradients $\frac{\partial L}{\partial {\bf y}}$ w.r.t to the output ${\bf y}$:
+\begin{equation}
+    \label{gradient}
+    \frac{\partial L}{\partial {\bf x}}={\bf W}^T \frac{\partial L}{\partial {\bf y}}, 
+    \frac{\partial L}{\partial {\bf W}}={\bf W}^T \frac{\partial L}{\partial {\bf y}}{\bf x}^T,
+    \frac{\partial L}{\partial {\bf b}}={\bf W}^T \frac{\partial L}{\partial {\bf y}}
+\end{equation}
+
+In what follows we derive the gradients required to use the back-propagation algorithm with the tensorizing layers. 
+To compute the gradient of the loss function w.r.t. the bias vector ${\bf b}$ and w.r.t. the input vector ${\bf x}$ one can use equations (\ref{gradient}). 
+The latter can be applied using the matrix-by-vector product (where the matrix is in the TT-format) with the complexity of $\mathcal{O}(dr^2n\max\{m,n\}^d)=\mathcal{O}(dr^2n\max\{M,N\})$.
+To perform a step of stochastic gradient descent, we can use traditional back-propagation in computational graph to compute gradient of loss function w.r.t the weight matrix $\mathbf{W}$, then we convert the gradient matrix into the TT-format using TT-SVD algorithm. Another way to learn the TensorNet parameters is to 
+compute gradient of loss function w.r.t the cores of the TT-representations of $\mathbf{W}$.
+
+\par For high-dimensional matrices, the TT-SVD algorithm will meet curse of dimensionality, i.e., computation cost will increase quickly such as exponentially. Then we have difficulty to employ TT-format in neural networks. To 
+A Randomized Tensor Train Singular Value
+Decomposition
+Each of the existing TT decomposition algorithms,
+including the TT-SVD and randomized TT-SVD, is successful in the field, but
+neither can both accurately and efficiently decompose large-scale sparse tensors. \cite{b13} proposes a new quasi-best fast TT
+decomposition algorithm for large-scale sparse tensors with proven correctness
+and the upper bound of its complexity is derived. In numerical experiments,
+authors verify that the proposed algorithm can decompose sparse tensors faster than
+the TT-SVD, and have more speed, precision and versatility than randomized
+TT-SVD\cite{b14}, and it can be used to decomposes arbitrary high-dimensional tensor
+without losing efficiency when the number of non-zero elements is limited. 
+Faster TT-SVD algorithm can be integrated into tensorizing neural networks, and it should be more efficiently to solve the problem in large scale.
+
+\section{Experiments}
+In all experiments we will use MATLAB extension\footnote{https://github.com/Bihaqo/TensorNet} of the MatConvNet framework\footnote{http://www.vlfeat.org/matconvnet}. For the operations related to the TT-format we use the TT-Toolbox\footnote{https://github.com/oseledets/TT-Toolbox} implemented in MATLAB as well.
+To show the properties of the TT-layer and compare different strategies for setting its parameters: dimensions of the tensors representing the input/output of the layer and the TT-ranks of the compressed weight matrix. 
+We run the experiment on the MNIST dataset for the task of handwritten-digit recognition. 
+As a baseline we use a neural network with two fullyconnected layers (1024 hidden units) and rectiﬁed linear unit (ReLU) and compute error on the test set. 
+For more reshaping options we resize the original 28 × 28 images to 32 × 32.
+
+Futhermore, we will train several networks differing in the parameters of the single TT-layer. The networks contain the following layers: the TT-layer with weight matrix of size 1024×1024, ReLU, the fully-connected layer with the weight matrix of size 1024 × 10. 
+We test different ways of reshaping the input/output tensors and try different ranks of the TT-layer. 
+As a simple compression baseline in the place of the TT-layer we use the fully-connected layer such that the rank of the weight matrix is bounded (implemented as follows: the two consecutive fully-connected layers with weight matrices of sizes 1024 × r and r ×1024, where r controls the matrix rank and the compression factor). 
+
+% \section{Ease of Use}
+
+% \subsection{Maintaining the Integrity of the Specifications}
+
+% The IEEEtran class file is used to format your paper and style the text. All margins, 
+% column widths, line spaces, and text fonts are prescribed; please do not 
+% alter them. You may note peculiarities. For example, the head margin
+% measures proportionately more than is customary. This measurement 
+% and others are deliberate, using specifications that anticipate your paper 
+% as one part of the entire proceedings, and not as an independent document. 
+% Please do not revise any of the current designations.
+
+% \section{Prepare Your Paper Before Styling}
+% Before you begin to format your paper, first write and save the content as a 
+% separate text file. Complete all content and organizational editing before 
+% formatting. Please note sections \ref{AA}--\ref{SCM} below for more information on 
+% proofreading, spelling and grammar.
+
+% Keep your text and graphic files separate until after the text has been 
+% formatted and styled. Do not number text heads---{\LaTeX} will do that 
+% for you.
+
+% \subsection{Abbreviations and Acronyms}\label{AA}
+% Define abbreviations and acronyms the first time they are used in the text, 
+% even after they have been defined in the abstract. Abbreviations such as 
+% IEEE, SI, MKS, CGS, ac, dc, and rms do not have to be defined. Do not use 
+% abbreviations in the title or heads unless they are unavoidable.
+
+% \subsection{Units}
+% \begin{itemize}
+% \item Use either SI (MKS) or CGS as primary units. (SI units are encouraged.) English units may be used as secondary units (in parentheses). An exception would be the use of English units as identifiers in trade, such as ``3.5-inch disk drive''.
+% \item Avoid combining SI and CGS units, such as current in amperes and magnetic field in oersteds. This often leads to confusion because equations do not balance dimensionally. If you must use mixed units, clearly state the units for each quantity that you use in an equation.
+% \item Do not mix complete spellings and abbreviations of units: ``Wb/m\textsuperscript{2}'' or ``webers per square meter'', not ``webers/m\textsuperscript{2}''. Spell out units when they appear in text: ``. . . a few henries'', not ``. . . a few H''.
+% \item Use a zero before decimal points: ``0.25'', not ``.25''. Use ``cm\textsuperscript{3}'', not ``cc''.)
+% \end{itemize}
+
+% \subsection{Equations}
+% Number equations consecutively. To make your 
+% equations more compact, you may use the solidus (~/~), the exp function, or 
+% appropriate exponents. Italicize Roman symbols for quantities and variables, 
+% but not Greek symbols. Use a long dash rather than a hyphen for a minus 
+% sign. Punctuate equations with commas or periods when they are part of a 
+% sentence, as in:
+% \begin{equation}
+% a+b=\gamma\label{eq}
+% \end{equation}
+
+% Be sure that the 
+% symbols in your equation have been defined before or immediately following 
+% the equation. Use ``\eqref{eq}'', not ``Eq.~\eqref{eq}'' or ``equation \eqref{eq}'', except at 
+% the beginning of a sentence: ``Equation \eqref{eq} is . . .''
+
+% \subsection{\LaTeX-Specific Advice}
+
+% Please use ``soft'' (e.g., \verb|\eqref{Eq}|) cross references instead
+% of ``hard'' references (e.g., \verb|(1)|). That will make it possible
+% to combine sections, add equations, or change the order of figures or
+% citations without having to go through the file line by line.
+
+% Please don't use the \verb|{eqnarray}| equation environment. Use
+% \verb|{align}| or \verb|{IEEEeqnarray}| instead. The \verb|{eqnarray}|
+% environment leaves unsightly spaces around relation symbols.
+
+% Please note that the \verb|{subequations}| environment in {\LaTeX}
+% will increment the main equation counter even when there are no
+% equation numbers displayed. If you forget that, you might write an
+% article in which the equation numbers skip from (17) to (20), causing
+% the copy editors to wonder if you've discovered a new method of
+% counting.
+
+% {\BibTeX} does not work by magic. It doesn't get the bibliographic
+% data from thin air but from .bib files. If you use {\BibTeX} to produce a
+% bibliography you must send the .bib files. 
+
+% {\LaTeX} can't read your mind. If you assign the same label to a
+% subsubsection and a table, you might find that Table I has been cross
+% referenced as Table IV-B3. 
+
+% {\LaTeX} does not have precognitive abilities. If you put a
+% \verb|\label| command before the command that updates the counter it's
+% supposed to be using, the label will pick up the last counter to be
+% cross referenced instead. In particular, a \verb|\label| command
+% should not go before the caption of a figure or a table.
+
+% Do not use \verb|\nonumber| inside the \verb|{array}| environment. It
+% will not stop equation numbers inside \verb|{array}| (there won't be
+% any anyway) and it might stop a wanted equation number in the
+% surrounding equation.
+
+% \subsection{Some Common Mistakes}\label{SCM}
+% \begin{itemize}
+% \item The word ``data'' is plural, not singular.
+% \item The subscript for the permeability of vacuum $\mu_{0}$, and other common scientific constants, is zero with subscript formatting, not a lowercase letter ``o''.
+% \item In American English, commas, semicolons, periods, question and exclamation marks are located within quotation marks only when a complete thought or name is cited, such as a title or full quotation. When quotation marks are used, instead of a bold or italic typeface, to highlight a word or phrase, punctuation should appear outside of the quotation marks. A parenthetical phrase or statement at the end of a sentence is punctuated outside of the closing parenthesis (like this). (A parenthetical sentence is punctuated within the parentheses.)
+% \item A graph within a graph is an ``inset'', not an ``insert''. The word alternatively is preferred to the word ``alternately'' (unless you really mean something that alternates).
+% \item Do not use the word ``essentially'' to mean ``approximately'' or ``effectively''.
+% \item In your paper title, if the words ``that uses'' can accurately replace the word ``using'', capitalize the ``u''; if not, keep using lower-cased.
+% \item Be aware of the different meanings of the homophones ``affect'' and ``effect'', ``complement'' and ``compliment'', ``discreet'' and ``discrete'', ``principal'' and ``principle''.
+% \item Do not confuse ``imply'' and ``infer''.
+% \item The prefix ``non'' is not a word; it should be joined to the word it modifies, usually without a hyphen.
+% \item There is no period after the ``et'' in the Latin abbreviation ``et al.''.
+% \item The abbreviation ``i.e.'' means ``that is'', and the abbreviation ``e.g.'' means ``for example''.
+% \end{itemize}
+% An excellent style manual for science writers is \cite{b7}.
+
+% \subsection{Authors and Affiliations}
+% \textbf{The class file is designed for, but not limited to, six authors.} A 
+% minimum of one author is required for all conference articles. Author names 
+% should be listed starting from left to right and then moving down to the 
+% next line. This is the author sequence that will be used in future citations 
+% and by indexing services. Names should not be listed in columns nor group by 
+% affiliation. Please keep your affiliations as succinct as possible (for 
+% example, do not differentiate among departments of the same organization).
+
+% \subsection{Identify the Headings}
+% Headings, or heads, are organizational devices that guide the reader through 
+% your paper. There are two types: component heads and text heads.
+
+% Component heads identify the different components of your paper and are not 
+% topically subordinate to each other. Examples include Acknowledgments and 
+% References and, for these, the correct style to use is ``Heading 5''. Use 
+% ``figure caption'' for your Figure captions, and ``table head'' for your 
+% table title. Run-in heads, such as ``Abstract'', will require you to apply a 
+% style (in this case, italic) in addition to the style provided by the drop 
+% down menu to differentiate the head from the text.
+
+% Text heads organize the topics on a relational, hierarchical basis. For 
+% example, the paper title is the primary text head because all subsequent 
+% material relates and elaborates on this one topic. If there are two or more 
+% sub-topics, the next level head (uppercase Roman numerals) should be used 
+% and, conversely, if there are not at least two sub-topics, then no subheads 
+% should be introduced.
+
+% \subsection{Figures and Tables}
+% \paragraph{Positioning Figures and Tables} Place figures and tables at the top and 
+% bottom of columns. Avoid placing them in the middle of columns. Large 
+% figures and tables may span across both columns. Figure captions should be 
+% below the figures; table heads should appear above the tables. Insert 
+% figures and tables after they are cited in the text. Use the abbreviation 
+% ``Fig.~\ref{fig}'', even at the beginning of a sentence.
+
+% \begin{table}[htbp]
+% \caption{Table Type Styles}
+% \begin{center}
+% \begin{tabular}{|c|c|c|c|}
+% \hline
+% \textbf{Table}&\multicolumn{3}{|c|}{\textbf{Table Column Head}} \\
+% \cline{2-4} 
+% \textbf{Head} & \textbf{\textit{Table column subhead}}& \textbf{\textit{Subhead}}& \textbf{\textit{Subhead}} \\
+% \hline
+% copy& More table copy$^{\mathrm{a}}$& &  \\
+% \hline
+% \multicolumn{4}{l}{$^{\mathrm{a}}$Sample of a Table footnote.}
+% \end{tabular}
+% \label{tab1}
+% \end{center}
+% \end{table}
+
+% \begin{figure}[htbp]
+% \centerline{\includegraphics{fig1.png}}
+% \caption{Example of a figure caption.}
+% \label{fig}
+% \end{figure}
+
+% Figure Labels: Use 8 point Times New Roman for Figure labels. Use words 
+% rather than symbols or abbreviations when writing Figure axis labels to 
+% avoid confusing the reader. As an example, write the quantity 
+% ``Magnetization'', or ``Magnetization, M'', not just ``M''. If including 
+% units in the label, present them within parentheses. Do not label axes only 
+% with units. In the example, write ``Magnetization (A/m)'' or ``Magnetization 
+% \{A[m(1)]\}'', not just ``A/m''. Do not label axes with a ratio of 
+% quantities and units. For example, write ``Temperature (K)'', not 
+% ``Temperature/K''.
+
+% \section*{Acknowledgment}
+
+% The preferred spelling of the word ``acknowledgment'' in America is without 
+% an ``e'' after the ``g''. Avoid the stilted expression ``one of us (R. B. 
+% G.) thanks $\ldots$''. Instead, try ``R. B. G. thanks$\ldots$''. Put sponsor 
+% acknowledgments in the unnumbered footnote on the first page.
+
+% \section*{References}
+
+% Please number citations consecutively within brackets \cite{b1}. The 
+% sentence punctuation follows the bracket \cite{b2}. Refer simply to the reference 
+% number, as in \cite{b3}---do not use ``Ref. \cite{b3}'' or ``reference \cite{b3}'' except at 
+% the beginning of a sentence: ``Reference \cite{b3} was the first $\ldots$''
+
+% Number footnotes separately in superscripts. Place the actual footnote at 
+% the bottom of the column in which it was cited. Do not put footnotes in the 
+% abstract or reference list. Use letters for table footnotes.
+
+% Unless there are six authors or more give all authors' names; do not use 
+% ``et al.''. Papers that have not been published, even if they have been 
+% submitted for publication, should be cited as ``unpublished'' \cite{b4}. Papers 
+% that have been accepted for publication should be cited as ``in press'' \cite{b5}. 
+% Capitalize only the first word in a paper title, except for proper nouns and 
+% element symbols.
+
+% For papers published in translation journals, please give the English 
+% citation first, followed by the original foreign-language citation \cite{b6}.
+
+\begin{thebibliography}{00}
+\bibitem{b1} A. Krizhevsky, I. Sutskever, and G. E. Hinton, ``Imagenet classification with deep convolutional neural networks,'' in Advances in Neural Information Processing Systems 25 (NIPS), 2012, pp. 1097–1105. 
+\bibitem{b2} K. Simonyan and A. Zisserman, “Very deep convolutional networks for large-scale image recognition,”in International Conference on Learning Representations (ICLR), 2015.
+\bibitem{b3} O. Russakovsky, J. Deng, H. Su, J. Krause, S. Satheesh, S. Ma, Z. Huang, A. Karpathy, A. Khosla,M. Bernstein, A. C. Berg, and L. Fei-Fei, “Imagenet large scale visual recognition challenge,” International Journal of Computer Vision (IJCV), 2015.
+\bibitem{b4} D. E. Rumelhart, G. E. Hinton, and R. J. Williams, “Learning representations by back-propagating errors,”Nature, vol. 323, no. 6088, pp. 533–536, 1986.
+\bibitem{b5} A. Krizhevsky, “Learning multiple layers of features from tiny images,” Master’s thesis, Computer Science Department, University of Toronto, 2009.
+\bibitem{b6} I. V. Oseledets, “Tensor-Train decomposition,” SIAM J. Scientific Computing, vol. 33, no. 5, pp. 2295–2317, 2011.
+\bibitem{b7} L. de Lathauwer, B. de Moor, and J. Vandewalle, A multilinear singular value decomposition, SIAM J. Matrix Anal. Appl., 21 (2000), pp. 1253–1278.
+\bibitem{b8} L. de Lathauwer, B. de Moor, and J. Vandewalle, On best rank-1 and rank-(R1, R2,...,RN ) approximation of high-order tensors, SIAM J. Matrix Anal. Appl., 21 (2000), pp. 1324–1342.
+\bibitem{b9} R. Bro, PARAFAC: Tutorial and applications, Chemometrics Intell. Lab. Syst., 38 (1997), pp. 149–171.
+\bibitem{b10} L. Grasedyck, Existence and computation of low Kronecker-rank approximations for large systems in tensor product structure, Computing, 72 (2004), pp. 247–265.
+\bibitem{b11} Novikov, A., Podoprikhin, D., Osokin, A., Vetrov, D. P. (2015). Tensorizing neural networks. In Advances in neural information processing systems (pp. 442-450).
+\bibitem{b12} J. Ba and R. Caruana, “Do deep nets really need to be deep?” in Advances in Neural Information Processing Systems 27 (NIPS), 2014, pp. 2654–2662.
+\bibitem{b13} Li, L., Yu, W., Batselier, K. (2019). Faster Tensor Train Decomposition for Sparse Data. arXiv preprint arXiv:1908.02721.
+\bibitem{b14} Huber, B., Schneider, R., Wolf, S. (2017). A randomized tensor train singular value decomposition. In Compressed Sensing and its Applications (pp. 261-290). Birkhäuser, Cham.
+\end{thebibliography}
+\vspace{12pt}
+% \color{red}
+% IEEE conference templates contain guidance text for composing and formatting conference papers. Please ensure that all template text is removed from your conference paper prior to submission to the conference. Failure to remove the template text from your paper may result in your paper not being published.
+
+\end{document}
