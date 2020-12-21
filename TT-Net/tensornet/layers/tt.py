@@ -44,7 +44,7 @@ def tt(inp,
                 creg = cores_regularizer[i]
             else:
                 creg = cores_regularizer
-                
+            #matrix cores = TT-cores?
             mat_cores.append(get_var_wrap('mat_core_%d' % (i + 1),
                                           shape=[out_modes[i] * mat_ranks[i + 1], mat_ranks[i] * inp_modes[i]],
                                           initializer=cinit,
