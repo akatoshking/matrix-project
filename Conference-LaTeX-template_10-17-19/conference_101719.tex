@@ -91,7 +91,7 @@ We will apply our method to popular network architectures proposed for data set 
 
 In various fields, low-rank approximation was applied to reduce the computation cost and memory usage. In \cite{b11}, they generalize the idea of low-rank. The authors do not find low-rank approximation of weight matrix in fully-connected layers, they treat the matrix as multidimensional tensor and employ Tensor Train decomposition \cite{b6} to accelerate the computation.
 Usally, wider neural network can achieve better performance than narrow neural network. But wide neural networks imply large dense matrix, amount of computation resources are used in per step when training neural networks. By using Tensor Train decomposition for weight matrix, wide neural network can be developed for applications with moderate computation cost and memory usage. 
-\cite{b11} shows that wide and shallow neural networks has competitive performance with the state-of-art deep neural networks by traing a shallow network oin the outputs of a trained deep neural network.
+\cite{gilboa2013scaling} shows that wide and shallow neural networks has competitive performance with the state-of-art deep neural networks by traing a shallow network oin the outputs of a trained deep neural network.
 They report the improvement of performance with the increase of the layer size and used up to 30 000 hidden units while restricting the matrix rank of the weight matrix in order to be able to keep and to update it during the training. Restricting the TT-ranks of the weight matrix (in contrast to the matrix rank) allows to use much wider layers potentially leading to the greater expressive power of the model.
 
 \par CP-decomposition algorithm was applied to compress convolution kernel in CNNs. And they also using properties of CP-decomposition to speed up the inference time.
@@ -386,27 +386,20 @@ Each edge is labeled -1 for a black victory, 0 for a draw, and +1 for a white vi
 
 % For papers published in translation journals, please give the English 
 % citation first, followed by the original foreign-language citation \cite{b6}.
-
-\begin{thebibliography}{00}
-    \bibitem{b1} A. Krizhevsky, I. Sutskever, and G. E. Hinton, “Imagenet classification with deep convolutional neural networks,” in Advances in Neural Information Processing Systems 25 (NIPS), 2012, pp. 1097–1105.
- \bibitem{b2}K. Simonyan and A. Zisserman, “Very deep convolutional networks for large-scale image recognition,”in International Conference on Learning Representations (ICLR), 2015.
- \bibitem{b3}O. Russakovsky, J. Deng, H. Su, J. Krause, S. Satheesh, S. Ma, Z. Huang, A. Karpathy, A. Khosla,M. Bernstein, A. C. Berg, and L. Fei-Fei, “Imagenet large scale visual recognition challenge,” International Journal of Computer Vision (IJCV), 2015.
- \bibitem{b4}D. E. Rumelhart, G. E. Hinton, and R. J. Williams, “Learning representations by back-propagating errors,”Nature, vol. 323, no. 6088, pp. 533–536, 1986.
- \bibitem{b5}A. Krizhevsky, “Learning multiple layers of features from tiny images,” Master’s thesis, Computer Science Department, University of Toronto, 2009.
- \bibitem{b6}I. V. Oseledets, “Tensor-Train decomposition,” SIAM J. Scientific Computing, vol. 33, no. 5, pp. 2295–2317, 2011.
- \bibitem{b7}L. de Lathauwer, B. de Moor, and J. Vandewalle, A multilinear singular value decomposition, SIAM J. Matrix Anal. Appl., 21 (2000), pp. 1253–1278.
- \bibitem{b8}L. de Lathauwer, B. de Moor, and J. Vandewalle, On best rank-1 and rank-(R1, R2,...,RN ) approximation of high-order tensors, SIAM J. Matrix Anal. Appl., 21 (2000), pp. 1324–1342.
- \bibitem{b9}R. Bro, PARAFAC: Tutorial and applications, Chemometrics Intell. Lab. Syst., 38 (1997), pp. 149–171.
- \bibitem{b10}L. Grasedyck, Existence and computation of low Kronecker-rank approximations for large systems in tensor product structure, Computing, 72 (2004), pp. 247–265.
- \bibitem{b11}Oseledets, and V. I. . "Tensor-Train Decomposition." Siam Journal on entific Computing 33.5(2011):2295-2317.
-% \bibitem{b1} G. Eason, B. Noble, and I. N. Sneddon, ``On certain integrals of Lipschitz-Hankel type involving products of Bessel functions,'' Phil. Trans. Roy. Soc. London, vol. A247, pp. 529--551, April 1955.
-% \bibitem{b2} J. Clerk Maxwell, A Treatise on Electricity and Magnetism, 3rd ed., vol. 2. Oxford: Clarendon, 1892, pp.68--73.
-% \bibitem{b3} I. S. Jacobs and C. P. Bean, ``Fine particles, thin films and exchange anisotropy,'' in Magnetism, vol. III, G. T. Rado and H. Suhl, Eds. New York: Academic, 1963, pp. 271--350.
-% \bibitem{b4} K. Elissa, ``Title of paper if known,'' unpublished.
-% \bibitem{b5} R. Nicole, ``Title of paper with only first word capitalized,'' J. Name Stand. Abbrev., in press.
-% \bibitem{b6} Y. Yorozu, M. Hirano, K. Oka, and Y. Tagawa, ``Electron spectroscopy studies on magneto-optical media and plastic substrate interface,'' IEEE Transl. J. Magn. Japan, vol. 2, pp. 740--741, August 1987 [Digests 9th Annual Conf. Magnetics Japan, p. 301, 1982].
-% \bibitem{b7} M. Young, The Technical Writer's Handbook. Mill Valley, CA: University Science, 1989.
-\end{thebibliography}
+\bibliography{references}
+% \begin{thebibliography}{00}
+%     \bibitem{b1} A. Krizhevsky, I. Sutskever, and G. E. Hinton, “Imagenet classification with deep convolutional neural networks,” in Advances in Neural Information Processing Systems 25 (NIPS), 2012, pp. 1097–1105.
+%  \bibitem{b2}K. Simonyan and A. Zisserman, “Very deep convolutional networks for large-scale image recognition,”in International Conference on Learning Representations (ICLR), 2015.
+%  \bibitem{b3}O. Russakovsky, J. Deng, H. Su, J. Krause, S. Satheesh, S. Ma, Z. Huang, A. Karpathy, A. Khosla,M. Bernstein, A. C. Berg, and L. Fei-Fei, “Imagenet large scale visual recognition challenge,” International Journal of Computer Vision (IJCV), 2015.
+%  \bibitem{b4}D. E. Rumelhart, G. E. Hinton, and R. J. Williams, “Learning representations by back-propagating errors,”Nature, vol. 323, no. 6088, pp. 533–536, 1986.
+%  \bibitem{b5}A. Krizhevsky, “Learning multiple layers of features from tiny images,” Master’s thesis, Computer Science Department, University of Toronto, 2009.
+%  \bibitem{b6}I. V. Oseledets, “Tensor-Train decomposition,” SIAM J. Scientific Computing, vol. 33, no. 5, pp. 2295–2317, 2011.
+%  \bibitem{b7}L. de Lathauwer, B. de Moor, and J. Vandewalle, A multilinear singular value decomposition, SIAM J. Matrix Anal. Appl., 21 (2000), pp. 1253–1278.
+%  \bibitem{b8}L. de Lathauwer, B. de Moor, and J. Vandewalle, On best rank-1 and rank-(R1, R2,...,RN ) approximation of high-order tensors, SIAM J. Matrix Anal. Appl., 21 (2000), pp. 1324–1342.
+%  \bibitem{b9}R. Bro, PARAFAC: Tutorial and applications, Chemometrics Intell. Lab. Syst., 38 (1997), pp. 149–171.
+%  \bibitem{b10}L. Grasedyck, Existence and computation of low Kronecker-rank approximations for large systems in tensor product structure, Computing, 72 (2004), pp. 247–265.
+%  \bibitem{b11}Oseledets, and V. I. . "Tensor-Train Decomposition." Siam Journal on entific Computing 33.5(2011):2295-2317.
+% \end{thebibliography}
 % \vspace{12pt}
 % \color{red}
 % IEEE conference templates contain guidance text for composing and formatting conference papers. Please ensure that all template text is removed from your conference paper prior to submission to the conference. Failure to remove the template text from your paper may result in your paper not being published.

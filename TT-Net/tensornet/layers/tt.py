@@ -16,8 +16,8 @@ def tt(inp,
     """ tt-layer (tt-matrix by full tensor product)
     Args:
         inp: input tensor, float - [batch_size, prod(inp_modes)]
-        inp_modes: input tensor modes
-        out_modes: output tensor modes
+        inp_modes: input tensor modes, i.e., The shape of input tensor?
+        out_modes: output tensor modes, i.e., The shape of output tensor?
         mat_ranks: tt-matrix ranks
         cores_initializer: cores init function, could be a list of functions for specifying different function for each core
         cores_regularizer: cores regularizer function, could be a list of functions for specifying different function for each core
