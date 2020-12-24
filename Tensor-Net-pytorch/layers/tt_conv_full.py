@@ -45,17 +45,23 @@ class tt_conv_full(nn.Module):
         self.window = window
         self.strides = strides 
         if padding=='SAME' and strides==[1,1]:
-            self.padding = ((window[0]-1)//2,)#stride=1
-            print(type(self.padding))
+            self.padding = ((window[0]-1)//2,(window[0]-1)//2)#stride=1
+            # print(type(self.padding))
+        elif padding=='VALID':
+            self.padding = 0
+        elif padding==1:
+            self.padding = 1
         # self.padding = padding 
         
         filter_shape = [window[0], window[1], ranks[0]]
         if (window[0] * window[1] * 1 * ranks[0] == 1):
             self.filters = torch.empty(*filter_shape, device=device)
             torch.nn.init.ones_(self.filters)
+            self.filters = Parameter(self.filters, requires_grad=True)
         else:
             self.filters = torch.empty(*filter_shape, device=device)
             filters_initializer(self.filters)
+            self.filters = Parameter(self.filters, requires_grad=True)
         self.dim = inp_ch_modes.size
         
         self.mat_cores = []
@@ -66,6 +72,7 @@ class tt_conv_full(nn.Module):
                 cinit = cores_initializer
             w = torch.empty(out_ch_modes[i] * ranks[i + 1], ranks[i] * inp_ch_modes[i], device=device)
             cinit(w)
+            w = Parameter(w, requires_grad=True)
             self.mat_cores.append(w)
         
         self.fshape = [window[0], window[1]]
@@ -80,16 +87,22 @@ class tt_conv_full(nn.Module):
         self.order += inord + outord
 
         if biases_initializer is not None:
-            self.biases = torch.empty(np.prod(out_ch_modes), device=device)
+            self.biases = torch.empty(np.prod(out_ch_modes), device=device, requires_grad=True)
             biases_initializer(self.biases)
+            self.biases = Parameter(self.biases, requires_grad=True)
         else:
-            self.biases = torch.empty(np.prod(out_ch_modes), device=device)
+            self.biases = torch.empty(np.prod(out_ch_modes), device=device, requires_grad=True)
             torch.nn.init.zeros_(self.biases)
+            self.biases = Parameter(self.biases, requires_grad=False)
+        # bs,ch,h,w = x.shape
+        # out = torch.reshape(x, [-1,h,w,ch])
+
+        
 
     def forward(self, x):
-        bs,ch,h,w = x.shape
-        # out = torch.reshape(x, [-1,h,w,ch])
+        # print(self.padding)
         full = self.filters
+        # print('filters',self.filters.shape)
         for i in range(self.dim):
             full = torch.reshape(full, [-1, self.ranks[i]])
             core = torch.transpose(self.mat_cores[i],0,1)
@@ -97,12 +110,12 @@ class tt_conv_full(nn.Module):
             full = torch.matmul(full, core)
         full = torch.reshape(full, self.fshape)
         full = full.permute( *self.order)
-        full = torch.reshape(full, [self.window[0], self.window[1], ch, np.prod(self.out_modes)])#[filter_height, filter_width, in_channels, out_channels]
-        full = full.permute(3,2,0,1)#out_channels, in_channels,H,W
-
-        # print(self.padding)
+        full = torch.reshape(full, [np.prod(self.out_modes), np.prod(self.in_modes), self.window[0], self.window[1] ])
+        # full = torch.reshape(full, [self.window[0], self.window[1], np.prod(self.in_modes), np.prod(self.out_modes)])#[filter_height, filter_width, in_channels, out_channels]
+        # full = full.permute(3,2,0,1)#out_channels, in_channels,H,W
+        # full = Parameter(full)
+        # print(type(full))
         out = F.conv2d(input=x, weight=full, bias=self.biases, stride=self.strides, padding=self.padding)
-        
         return out
 
 # batch_in = torch.randn(100,64,128,128)
